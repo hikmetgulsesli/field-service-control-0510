@@ -1,0 +1,74 @@
+[
+  {
+    "screenId": "159e6ca66d8b4fbd863a360febc8b8dd",
+    "title": "System Error State",
+    "componentName": "SystemErrorState",
+    "file": "src/screens/SystemErrorState.tsx",
+    "buttons": 2,
+    "inputs": 0,
+    "links": 0
+  },
+  {
+    "screenId": "b6977c5e5e884c03be048f1624f64cc0",
+    "title": "Settings",
+    "componentName": "Settings",
+    "file": "src/screens/Settings.tsx",
+    "buttons": 12,
+    "inputs": 4,
+    "links": 6
+  },
+  {
+    "screenId": "1285273b42be49d7a50ac55ec3c5db8c",
+    "title": "Insights & Analytics",
+    "componentName": "InsightsAnalytics",
+    "file": "src/screens/InsightsAnalytics.tsx",
+    "buttons": 9,
+    "inputs": 0,
+    "links": 6
+  },
+  {
+    "screenId": "f7805889138e4463a5d8fd2439e964ec",
+    "title": "User Profile",
+    "componentName": "UserProfile",
+    "file": "src/screens/UserProfile.tsx",
+    "buttons": 6,
+    "inputs": 0,
+    "links": 0
+  },
+  {
+    "screenId": "0a58004c19a146d0b143e7b9875d6f29",
+    "title": "Create / Edit Record",
+    "componentName": "CreateEditRecord",
+    "file": "src/screens/CreateEditRecord.tsx",
+    "buttons": 6,
+    "inputs": 5,
+    "links": 7
+  },
+  {
+    "screenId": "d259931f8a1b4cc9bd43d468fb5d8041",
+    "title": "Service Detail",
+    "componentName": "ServiceDetail",
+    "file": "src/screens/ServiceDetail.tsx",
+    "buttons": 7,
+    "inputs": 0,
+    "links": 7
+  },
+  {
+    "screenId": "83b772d98f7946d2b79eacbab7f081b7",
+    "title": "Dashboard",
+    "componentName": "Dashboard",
+    "file": "src/screens/Dashboard.tsx",
+    "buttons": 8,
+    "inputs": 2,
+    "links": 6
+  },
+  {
+    "screenId": "376c7bbaccb648619389609c8b14754c",
+    "title": "Empty State",
+    "componentName": "EmptyState",
+    "file": "src/screens/EmptyState.tsx",
+    "buttons": 5,
+    "inputs": 0,
+    "links": 6
+  }
+]
