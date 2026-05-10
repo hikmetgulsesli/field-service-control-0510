@@ -132,7 +132,7 @@ export function Settings(props: SettingsProps) {
         </div>
         <div className="mt-auto">
           <button
-            onClick={() => {}}
+            onClick={() => actions.openPanel("support")}
             className="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150 cursor-pointer w-full text-left"
             aria-label="Support"
           >
