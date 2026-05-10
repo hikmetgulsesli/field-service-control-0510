@@ -74,7 +74,7 @@ export function Settings(props: SettingsProps) {
   const profile = state.profile;
   const settings = state.settings;
 
-  const handleToggle = (key: "notificationsEnabled" | "autoRefresh") => {
+  const handleToggle = (key: "notificationsEnabled") => {
     actions.updateSettings({ [key]: !settings[key] });
   };
 
@@ -274,14 +274,14 @@ export function Settings(props: SettingsProps) {
                   </div>
                   <div className="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
                     <div>
-                      <div className="font-label-md text-label-md text-on-surface">Background Data Sync</div>
-                      <div className="font-body-md text-body-md text-on-surface-variant mt-unit">Automatically refresh service records at the configured interval.</div>
+                      <div className="font-label-md text-label-md text-on-surface">Routine Service Updates</div>
+                      <div className="font-body-md text-body-md text-on-surface-variant mt-unit">Standard job completion and sync notifications.</div>
                     </div>
                     <button
-                      onClick={() => handleToggle("autoRefresh")}
-                      aria-checked={settings.autoRefresh}
+                      onClick={() => handleToggle("notificationsEnabled")}
+                      aria-checked={settings.notificationsEnabled}
                       className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background ${
-                        settings.autoRefresh ? "bg-primary-container" : "bg-surface-container-highest"
+                        settings.notificationsEnabled ? "bg-primary-container" : "bg-surface-container-highest"
                       }`}
                       role="switch"
                       type="button"
@@ -289,7 +289,7 @@ export function Settings(props: SettingsProps) {
                       <span
                         aria-hidden={true}
                         className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow ring-0 transition duration-200 ease-in-out ${
-                          settings.autoRefresh ? "translate-x-5 bg-on-primary-container" : "translate-x-0 bg-outline"
+                          settings.notificationsEnabled ? "translate-x-5 bg-on-primary-container" : "translate-x-0 bg-outline"
                         }`}
                       ></span>
                     </button>

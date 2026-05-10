@@ -138,12 +138,12 @@ describe("Settings", () => {
     expect(mockUpdateSettings).toHaveBeenCalledWith({ notificationsEnabled: false });
   });
 
-  it("toggles autoRefresh when Background Data Sync switch is clicked", () => {
+  it("toggles notificationsEnabled when Routine Service Updates switch is clicked", () => {
     renderWithContext(<Settings />);
     const switches = screen.getAllByRole("switch");
-    // Second switch is Background Data Sync
+    // Second switch is Routine Service Updates
     fireEvent.click(switches[1]);
-    expect(mockUpdateSettings).toHaveBeenCalledWith({ autoRefresh: false });
+    expect(mockUpdateSettings).toHaveBeenCalledWith({ notificationsEnabled: false });
   });
 
   it("calls retryStorage when Retry Sync is clicked", () => {
