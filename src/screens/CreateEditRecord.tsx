@@ -7,9 +7,9 @@
 // 3. Add onClick/onChange handlers to interactive elements
 // 4. Replace placeholder data with props/state
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useAppContext } from "../contexts/AppContext";
-import { DEMO_TECHNICIANS } from "../types/domain";
+import { DEMO_TECHNICIANS, ServiceRecord } from "../types/domain";
 
 const SERVICE_TYPE_LABELS: Record<string, string> = {
   maintenance: "Preventative Maintenance",
@@ -18,18 +18,46 @@ const SERVICE_TYPE_LABELS: Record<string, string> = {
   inspection: "Site Inspection",
 };
 
+function generateServiceId(): string {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let result = "";
+  for (let i = 0; i < 4; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `SRV-${result}`;
+}
+
 interface CreateEditRecordProps {}
 
 export function CreateEditRecord(props: CreateEditRecordProps) {
   const { state, actions } = useAppContext();
 
+  const existingRecord = state.selectedRecordId
+    ? state.records.find((r) => r.id === state.selectedRecordId)
+    : null;
+  const isEditMode = !!existingRecord;
+
   const [customerName, setCustomerName] = useState("");
   const [serviceType, setServiceType] = useState("");
-  const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
+  const [priority, setPriority] = useState<"low" | "medium" | "high" | "critical">("medium");
   const [description, setDescription] = useState("");
   const [technicianId, setTechnicianId] = useState("");
   const [showError, setShowError] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Populate form when editing an existing record
+  useEffect(() => {
+    if (existingRecord) {
+      setCustomerName(existingRecord.customerName || "");
+      setPriority(existingRecord.priority || "medium");
+      setDescription(existingRecord.notes || "");
+      setTechnicianId(existingRecord.assignedTechId || "");
+      setServiceType("");
+      setShowError(false);
+    } else {
+      resetForm();
+    }
+  }, [existingRecord?.id]);
 
   const technicians =
     state.technicians.length > 0 ? state.technicians : DEMO_TECHNICIANS;
@@ -51,28 +79,34 @@ export function CreateEditRecord(props: CreateEditRecordProps) {
     }
     setShowError(false);
 
-    const serviceId = `SRV-${Date.now().toString().slice(-4)}`;
-    const now = new Date();
-    const timeString = now.toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-
+    const now = new Date().toISOString();
     const serviceTypeLabel = SERVICE_TYPE_LABELS[serviceType] || serviceType;
 
-    actions.addRecord({
-      serviceId,
-      customerName: customerName.trim(),
-      location: "Pending Site Assignment",
-      status: "ready",
-      assignedTechId: technicianId || null,
-      priority,
-      lastUpdate: timeString,
-      notes: serviceTypeLabel
-        ? `Service Type: ${serviceTypeLabel}\n\n${description}`.trim()
-        : description,
-    });
+    if (isEditMode && existingRecord) {
+      actions.updateRecord(existingRecord.id, {
+        customerName: customerName.trim(),
+        assignedTechId: technicianId || null,
+        priority,
+        notes: serviceTypeLabel
+          ? `Service Type: ${serviceTypeLabel}\n\n${description}`.trim()
+          : description,
+        lastUpdate: now,
+      });
+    } else {
+      const serviceId = generateServiceId();
+      actions.addRecord({
+        serviceId,
+        customerName: customerName.trim(),
+        location: "Pending Site Assignment",
+        status: "ready",
+        assignedTechId: technicianId || null,
+        priority,
+        lastUpdate: now,
+        notes: serviceTypeLabel
+          ? `Service Type: ${serviceTypeLabel}\n\n${description}`.trim()
+          : description,
+      });
+    }
 
     actions.navigate("dashboard");
   }
@@ -94,7 +128,7 @@ export function CreateEditRecord(props: CreateEditRecordProps) {
         </div>
         <button
           className="w-full flex items-center justify-center gap-sm bg-primary-container text-on-primary-container font-label-md text-label-md py-sm px-md rounded-lg mb-lg hover:bg-inverse-primary transition-colors"
-          onClick={resetForm}
+          onClick={() => { resetForm(); actions.selectRecord(null); }}
           aria-label="New Record"
         >
           <span className="material-symbols-outlined text-[18px]">add</span>
@@ -213,7 +247,7 @@ export function CreateEditRecord(props: CreateEditRecordProps) {
             </div>
             <button
               className="w-full flex items-center gap-sm bg-primary-container text-on-primary-container font-label-md text-label-md py-sm px-md rounded-lg mb-lg"
-              onClick={() => { resetForm(); setMobileMenuOpen(false); }}
+              onClick={() => { resetForm(); actions.selectRecord(null); setMobileMenuOpen(false); }}
             >
               <span className="material-symbols-outlined text-[18px]">add</span>
               New Record
@@ -267,9 +301,9 @@ export function CreateEditRecord(props: CreateEditRecordProps) {
                 Service Records
               </button>
               <span className="material-symbols-outlined text-[16px]">chevron_right</span>
-              <span className="text-on-surface">Create Record</span>
+              <span className="text-on-surface">{isEditMode ? "Edit Record" : "Create Record"}</span>
             </div>
-            <h2 className="font-display-lg text-display-lg text-on-surface">New Service Record</h2>
+            <h2 className="font-display-lg text-display-lg text-on-surface">{isEditMode ? "Edit Service Record" : "New Service Record"}</h2>
           </div>
           {/* Form Container */}
           <div className="max-w-4xl mx-auto bg-surface border border-outline-variant rounded-xl overflow-hidden">

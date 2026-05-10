@@ -7,6 +7,7 @@ import type { AppActions } from "../hooks/useAppState";
 
 const mockNavigate = vi.fn();
 const mockAddRecord = vi.fn();
+const mockUpdateRecord = vi.fn();
 const mockOpenPanel = vi.fn();
 const mockSetSearchQuery = vi.fn();
 
@@ -57,7 +58,7 @@ const mockActions: AppActions = {
   setTechFilter: vi.fn(),
   selectRecord: vi.fn(),
   addRecord: mockAddRecord,
-  updateRecord: vi.fn(),
+  updateRecord: mockUpdateRecord,
   deleteRecord: vi.fn(),
   updateProfile: vi.fn(),
   updateSettings: vi.fn(),
@@ -107,6 +108,94 @@ describe("CreateEditRecord", () => {
     const customerInput = screen.getByLabelText(/Customer Name/i);
     fireEvent.change(customerInput, { target: { value: "Acme Corp" } });
     expect(screen.queryByText(/Customer name is required/i)).not.toBeInTheDocument();
+  });
+
+  it("populates form fields in edit mode when selectedRecordId is set", () => {
+    renderWithContext(<CreateEditRecord />, {
+      selectedRecordId: "rec-1",
+      records: [
+        {
+          id: "rec-1",
+          serviceId: "SRV-9999",
+          customerName: "Edit Corp",
+          location: "Sector 5",
+          status: "ready",
+          assignedTechId: "tech-2",
+          priority: "high",
+          lastUpdate: "2024-05-10T12:00:00Z",
+          createdAt: "2024-05-10T08:00:00Z",
+          updatedAt: "2024-05-10T12:00:00Z",
+          notes: "Existing notes",
+        },
+      ],
+    });
+    expect(screen.getByLabelText(/Customer Name/i)).toHaveValue("Edit Corp");
+    expect(screen.getByDisplayValue("high")).toBeChecked();
+    expect(screen.getByLabelText(/Assigned Technician/i)).toHaveValue("tech-2");
+    expect(screen.getByLabelText(/Issue Description/i)).toHaveValue("Existing notes");
+    expect(screen.getByText("Edit Service Record")).toBeInTheDocument();
+  });
+
+  it("calls updateRecord when saving in edit mode", () => {
+    renderWithContext(<CreateEditRecord />, {
+      selectedRecordId: "rec-1",
+      records: [
+        {
+          id: "rec-1",
+          serviceId: "SRV-9999",
+          customerName: "Edit Corp",
+          location: "Sector 5",
+          status: "ready",
+          assignedTechId: "tech-2",
+          priority: "high",
+          lastUpdate: "2024-05-10T12:00:00Z",
+          createdAt: "2024-05-10T08:00:00Z",
+          updatedAt: "2024-05-10T12:00:00Z",
+          notes: "Existing notes",
+        },
+      ],
+    });
+
+    const customerInput = screen.getByLabelText(/Customer Name/i);
+    fireEvent.change(customerInput, { target: { value: "Updated Corp" } });
+
+    fireEvent.click(screen.getByRole("button", { name: /Save Record/i }));
+
+    expect(mockUpdateRecord).toHaveBeenCalledTimes(1);
+    const submitted = mockUpdateRecord.mock.calls[0];
+    expect(submitted[0]).toBe("rec-1");
+    expect(submitted[1].customerName).toBe("Updated Corp");
+    expect(submitted[1].assignedTechId).toBe("tech-2");
+    expect(submitted[1].priority).toBe("high");
+    expect(mockNavigate).toHaveBeenCalledWith("dashboard");
+    expect(mockAddRecord).not.toHaveBeenCalled();
+  });
+
+  it("clears selected record and resets form when New Record is clicked in edit mode", () => {
+    renderWithContext(<CreateEditRecord />, {
+      selectedRecordId: "rec-1",
+      records: [
+        {
+          id: "rec-1",
+          serviceId: "SRV-9999",
+          customerName: "Edit Corp",
+          location: "Sector 5",
+          status: "ready",
+          assignedTechId: "tech-2",
+          priority: "high",
+          lastUpdate: "2024-05-10T12:00:00Z",
+          createdAt: "2024-05-10T08:00:00Z",
+          updatedAt: "2024-05-10T12:00:00Z",
+          notes: "Existing notes",
+        },
+      ],
+    });
+
+    const newRecordBtn = screen.getByRole("button", { name: /New Record/i });
+    fireEvent.click(newRecordBtn);
+
+    expect(mockActions.selectRecord).toHaveBeenCalledWith(null);
+    expect(screen.getByLabelText(/Customer Name/i)).toHaveValue("");
   });
 
   it("submits form with valid data and navigates to dashboard", () => {
