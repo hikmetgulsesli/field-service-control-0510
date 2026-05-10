@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings - Field Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#233144",
+                        "on-secondary-fixed-variant": "#3a485b",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-low": "#191b23",
+                        "secondary-fixed-dim": "#b9c7df",
+                        "on-tertiary": "#581e00",
+                        "surface-container-lowest": "#0c0e16",
+                        "surface": "#11131b",
+                        "tertiary": "#ffb596",
+                        "secondary-container": "#3c4a5e",
+                        "secondary": "#b9c7df",
+                        "surface-variant": "#32343d",
+                        "on-tertiary-fixed-variant": "#7d2d00",
+                        "on-primary-container": "#eeefff",
+                        "surface-tint": "#b4c5ff",
+                        "tertiary-fixed-dim": "#ffb596",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "surface-dim": "#11131b",
+                        "inverse-on-surface": "#2e3039",
+                        "tertiary-container": "#bc4800",
+                        "on-surface": "#e1e2ed",
+                        "surface-container-high": "#282a32",
+                        "error": "#ffb4ab",
+                        "on-tertiary-fixed": "#360f00",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-primary": "#002a78",
+                        "inverse-primary": "#0053db",
+                        "on-surface-variant": "#c3c6d7",
+                        "on-error": "#690005",
+                        "on-tertiary-container": "#ffede6",
+                        "background": "#11131b",
+                        "primary-container": "#2563eb",
+                        "surface-container": "#1d1f27",
+                        "primary-fixed": "#dbe1ff",
+                        "on-secondary-container": "#abb9d1",
+                        "primary": "#b4c5ff",
+                        "outline-variant": "#434655",
+                        "error-container": "#93000a",
+                        "surface-bright": "#373942",
+                        "tertiary-fixed": "#ffdbcd",
+                        "on-primary-fixed": "#00174b",
+                        "on-background": "#e1e2ed",
+                        "secondary-fixed": "#d5e3fc",
+                        "on-secondary-fixed": "#0d1c2e",
+                        "inverse-surface": "#e1e2ed",
+                        "outline": "#8d90a0",
+                        "surface-container-highest": "#32343d"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "xs": "4px",
+                        "sm": "8px",
+                        "gutter": "16px",
+                        "xl": "32px",
+                        "unit": "4px",
+                        "lg": "24px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "32px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "mono-data": ["system-ui"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "mono-data": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+        }
+        /* Custom scrollbar for better dark mode look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: theme('colors.surface-container-low');
+        }
+        ::-webkit-scrollbar-thumb {
+            background: theme('colors.outline-variant');
+            border-radius: theme('borderRadius.full');
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: theme('colors.outline');
+        }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden antialiased font-body-md text-body-md">
+<!-- SideNavBar (Web Only) -->
+<nav class="hidden md:flex flex-col h-full py-lg px-md space-y-sm bg-surface-container-low dark:bg-surface-container-low border-r border-outline-variant dark:border-outline-variant w-64 flex-shrink-0 z-10">
+<div class="flex items-center gap-sm mb-xl px-xs">
+<span class="material-symbols-outlined text-primary text-[28px]" style="font-variation-settings: 'FILL' 1;">
+                local_shipping
+            </span>
+<div>
+<h1 class="text-headline-sm font-headline-sm font-semibold text-primary dark:text-primary leading-tight">Field Control</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Ops Command</p>
+</div>
+</div>
+<button class="bg-primary-container text-on-primary-container font-label-md text-label-md py-sm px-md rounded-lg flex items-center justify-center gap-xs mb-lg hover:bg-primary transition-colors focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background">
+<span class="material-symbols-outlined text-[18px]">add</span>
+            New Record
+        </button>
+<div class="flex-1 space-y-xs">
+<a class="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-md text-label-md">Service Records</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-md text-label-md">Insights</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded-lg bg-secondary-container dark:bg-secondary-container text-on-secondary-container dark:text-on-secondary-container font-bold scale-95 active:scale-100 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md">Profile</span>
+</a>
+</div>
+<div class="mt-auto">
+<a class="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150" href="#">
+<span class="material-symbols-outlined">contact_support</span>
+<span class="font-label-md text-label-md">Support</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col min-w-0 bg-background relative overflow-hidden">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-50 flex items-center justify-between px-gutter w-full h-16 bg-surface-container dark:bg-surface-container border-b border-outline-variant dark:border-outline-variant">
+<div class="flex items-center gap-md">
+<!-- Mobile Menu Button -->
+<button class="md:hidden text-on-surface hover:bg-surface-container-high transition-colors p-sm rounded-full">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="text-headline-sm font-headline-sm font-bold text-on-surface dark:text-on-surface md:hidden">ServiceControl</span>
+</div>
+<div class="flex-1 max-w-md mx-md hidden md:block">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-high border-outline-variant text-on-surface placeholder-on-surface-variant rounded-full py-sm pl-xl pr-md text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" placeholder="Search settings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors p-sm rounded-full cursor-pointer active:opacity-80 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors p-sm rounded-full cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<button class="ml-xs hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors p-[2px] rounded-full cursor-pointer active:opacity-80 border border-outline-variant">
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARx1HHTiRQIlxd8uVNzDjilmzGTkd0sZNqw6hg24ym7yUmP6hrm125PfFQdcsBvJEMcmjpbRyB7H_81augNynbLBuOv9i7cXLZCFboFEZ3ftaEzLDd3V9k-DcPDgi0wClHuW1umYHOI9yFEirnsZ-JANes0qOG2Z6GXTM85oz4H1-0V-R2RlkFYR-a51UPgRLYVk7BQw9K1xybWGaVqfMwuYK1bC2D5tutKhc6LZLvK1Kxz38CElSFZDpwlBoBtp-jVTrG1HbZE5j5"/>
+</button>
+</div>
+</header>
+<!-- Canvas -->
+<main class="flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop">
+<div class="max-w-4xl mx-auto space-y-lg pb-xl">
+<!-- Page Header -->
+<div class="flex items-start justify-between flex-wrap gap-md">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Application Settings</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-xs">Manage your operational preferences and system configurations.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm rounded-lg border border-outline-variant text-on-surface font-label-md text-label-md flex items-center gap-xs hover:bg-surface-container-high transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                            Retry Sync
+                        </button>
+<button class="px-md py-sm rounded-lg bg-surface-container-high border border-outline-variant text-error font-label-md text-label-md flex items-center gap-xs hover:bg-error-container hover:border-error transition-colors focus:ring-2 focus:ring-error focus:outline-none">
+<span class="material-symbols-outlined text-[18px]">restart_alt</span>
+                            Reset All
+                        </button>
+</div>
+</div>
+<!-- Bento Grid Layout for Settings -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Notifications & Alerts (Spans 8 cols) -->
+<section class="col-span-1 md:col-span-8 bg-surface border border-outline-variant rounded-xl p-md flex flex-col gap-md">
+<div class="flex items-center gap-sm pb-sm border-b border-surface-container-high">
+<span class="material-symbols-outlined text-primary">notifications_active</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Alert Configuration</h3>
+</div>
+<div class="space-y-sm flex-1">
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
+<div>
+<div class="font-label-md text-label-md text-on-surface">Critical System Alerts</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-unit">Dispatch failures and offline mode warnings.</div>
+</div>
+<!-- Toggle Switch -->
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background" role="switch" type="button">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-on-primary-container shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
+<div>
+<div class="font-label-md text-label-md text-on-surface">Routine Service Updates</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-unit">Standard job completion and sync notifications.</div>
+</div>
+<button aria-checked="false" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-surface-container-highest transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background" role="switch" type="button">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 translate-x-0 transform rounded-full bg-outline shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+<div class="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
+<div>
+<div class="font-label-md text-label-md text-on-surface">Audible Pings</div>
+<div class="font-body-md text-body-md text-on-surface-variant mt-unit">Play sounds for incoming priority tasks.</div>
+</div>
+<button aria-checked="true" class="relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-primary-container transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background" role="switch" type="button">
+<span aria-hidden="true" class="pointer-events-none inline-block h-5 w-5 translate-x-5 transform rounded-full bg-on-primary-container shadow ring-0 transition duration-200 ease-in-out"></span>
+</button>
+</div>
+</div>
+</section>
+<!-- Theme & Appearance (Spans 4 cols) -->
+<section class="col-span-1 md:col-span-4 bg-surface border border-outline-variant rounded-xl p-md flex flex-col gap-md">
+<div class="flex items-center gap-sm pb-sm border-b border-surface-container-high">
+<span class="material-symbols-outlined text-primary">palette</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Appearance</h3>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-sm">
+<label class="relative flex items-center p-sm rounded-lg border-2 border-primary bg-surface-container-low cursor-pointer">
+<input checked="" class="sr-only" name="theme" type="radio" value="dark"/>
+<span class="material-symbols-outlined text-primary mr-sm">dark_mode</span>
+<div class="flex-1">
+<div class="font-label-md text-label-md text-on-surface">Dark Mode (Forced)</div>
+<div class="font-label-sm text-label-sm text-primary mt-unit">Required for field ops</div>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</label>
+<label class="relative flex items-center p-sm rounded-lg border border-surface-container-high bg-surface-container-lowest opacity-50 cursor-not-allowed">
+<input class="sr-only" disabled="" name="theme" type="radio" value="light"/>
+<span class="material-symbols-outlined text-on-surface-variant mr-sm">light_mode</span>
+<div class="flex-1">
+<div class="font-label-md text-label-md text-on-surface-variant">Light Mode</div>
+<div class="font-label-sm text-label-sm text-on-surface-variant mt-unit">Unavailable</div>
+</div>
+</label>
+</div>
+</section>
+<!-- API Configuration (Spans 6 cols) -->
+<section class="col-span-1 md:col-span-6 bg-surface border border-outline-variant rounded-xl p-md flex flex-col gap-md">
+<div class="flex items-center gap-sm pb-sm border-b border-surface-container-high">
+<span class="material-symbols-outlined text-primary">api</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Environment Setup</h3>
+</div>
+<div class="space-y-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="api-endpoint">Primary Endpoint URL</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">link</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg py-sm pl-xl pr-md font-mono-data text-mono-data focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all" id="api-endpoint" type="url" value="https://api.fieldcontrol.corp/v3/prod"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface mb-xs" for="sync-interval">Background Sync Interval</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface rounded-lg py-sm px-md font-body-md text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all appearance-none" id="sync-interval">
+<option value="5">Every 5 minutes (High Drain)</option>
+<option selected="" value="15">Every 15 minutes (Standard)</option>
+<option value="30">Every 30 minutes (Eco)</option>
+<option value="manual">Manual Only</option>
+</select>
+</div>
+<div class="pt-sm">
+<button class="w-full bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant text-on-surface font-label-md text-label-md py-sm px-md rounded-lg transition-colors focus:ring-2 focus:ring-primary-container focus:outline-none flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">network_check</span>
+                                    Test Connection
+                                </button>
+</div>
+</div>
+</section>
+<!-- Storage & Cache (Spans 6 cols) -->
+<section class="col-span-1 md:col-span-6 bg-surface border border-outline-variant rounded-xl p-md flex flex-col gap-md">
+<div class="flex items-center gap-sm pb-sm border-b border-surface-container-high">
+<span class="material-symbols-outlined text-primary">storage</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Data Management</h3>
+</div>
+<div class="flex-1 flex flex-col justify-between">
+<div class="space-y-sm">
+<div class="flex justify-between items-center bg-surface-container-low p-sm rounded-lg border border-surface-container-high">
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Offline Payload Cache</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Pending sync records</span>
+</div>
+<span class="font-mono-data text-mono-data text-primary">12.4 MB</span>
+</div>
+<div class="flex justify-between items-center bg-surface-container-low p-sm rounded-lg border border-surface-container-high">
+<div>
+<span class="font-label-md text-label-md text-on-surface block">Asset Storage</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Maps &amp; schematics</span>
+</div>
+<span class="font-mono-data text-mono-data text-on-surface-variant">245.1 MB</span>
+</div>
+</div>
+<div class="mt-md pt-md border-t border-surface-container-high">
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-sm">Clearing local storage will sign you out and remove all unsynced field data. Proceed with caution.</p>
+<button class="w-full bg-error-container/20 hover:bg-error-container border border-error text-error font-label-md text-label-md py-sm px-md rounded-lg transition-colors focus:ring-2 focus:ring-error focus:outline-none flex justify-center items-center gap-xs">
+<span class="material-symbols-outlined text-[18px]">delete_forever</span>
+                                    Clear Local Storage
+                                </button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</body></html>

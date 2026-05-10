@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Profile Panel</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary": "#233144",
+                    "on-secondary-fixed-variant": "#3a485b",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#191b23",
+                    "secondary-fixed-dim": "#b9c7df",
+                    "on-tertiary": "#581e00",
+                    "surface-container-lowest": "#0c0e16",
+                    "surface": "#11131b",
+                    "tertiary": "#ffb596",
+                    "secondary-container": "#3c4a5e",
+                    "secondary": "#b9c7df",
+                    "surface-variant": "#32343d",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-primary-container": "#eeefff",
+                    "surface-tint": "#b4c5ff",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-dim": "#11131b",
+                    "inverse-on-surface": "#2e3039",
+                    "tertiary-container": "#bc4800",
+                    "on-surface": "#e1e2ed",
+                    "surface-container-high": "#282a32",
+                    "error": "#ffb4ab",
+                    "on-tertiary-fixed": "#360f00",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-primary": "#002a78",
+                    "inverse-primary": "#0053db",
+                    "on-surface-variant": "#c3c6d7",
+                    "on-error": "#690005",
+                    "on-tertiary-container": "#ffede6",
+                    "background": "#11131b",
+                    "primary-container": "#2563eb",
+                    "surface-container": "#1d1f27",
+                    "primary-fixed": "#dbe1ff",
+                    "on-secondary-container": "#abb9d1",
+                    "primary": "#b4c5ff",
+                    "outline-variant": "#434655",
+                    "error-container": "#93000a",
+                    "surface-bright": "#373942",
+                    "tertiary-fixed": "#ffdbcd",
+                    "on-primary-fixed": "#00174b",
+                    "on-background": "#e1e2ed",
+                    "secondary-fixed": "#d5e3fc",
+                    "on-secondary-fixed": "#0d1c2e",
+                    "inverse-surface": "#e1e2ed",
+                    "outline": "#8d90a0",
+                    "surface-container-highest": "#32343d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "xs": "4px",
+                    "sm": "8px",
+                    "gutter": "16px",
+                    "xl": "32px",
+                    "unit": "4px",
+                    "lg": "24px",
+                    "margin-mobile": "16px",
+                    "margin-desktop": "32px"
+            },
+            "fontFamily": {
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-md": ["Inter"],
+                    "mono-data": ["system-ui"],
+                    "body-lg": ["Inter"],
+                    "display-lg": ["Inter"],
+                    "headline-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                    "mono-data": ["13px", {"lineHeight": "18px", "fontWeight": "400"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background min-h-screen flex items-center justify-center p-md antialiased text-on-surface">
+<!-- Profile Panel Overlay -->
+<div class="w-full max-w-[600px] bg-surface-container rounded-xl border border-outline-variant shadow-[0_8px_32px_rgba(0,0,0,0.5)] relative flex flex-col overflow-hidden">
+<!-- Action Header -->
+<div class="flex justify-between items-center px-lg py-md border-b border-outline-variant/50 bg-surface-container-low">
+<span class="font-headline-sm text-headline-sm text-on-surface">Profile Identity</span>
+<button aria-label="Close Profile" class="w-[32px] h-[32px] flex items-center justify-center rounded bg-surface-container-highest hover:bg-surface-bright text-on-surface-variant hover:text-on-surface transition-colors border border-outline-variant">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Identity Hero Section -->
+<div class="flex flex-col md:flex-row items-center p-xl border-b border-outline-variant/30 gap-lg bg-gradient-to-b from-surface-container-low to-surface-container">
+<div class="relative">
+<div class="w-[100px] h-[100px] rounded-full border-2 border-primary-container p-[2px] bg-surface">
+<img class="w-full h-full object-cover rounded-full" data-alt="A highly professional corporate headshot of a serious male field technician in a dark, moody industrial setting. The lighting is cinematic, utilizing cool blue rim lights to highlight his jawline against a deep slate background. He wears a subtle dark utility uniform, projecting authority and technical expertise. The overall aesthetic perfectly matches a high-end dark-mode interface palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs6uE81zDY65NhdTVBG5E9GIjZToTYLO9bU8rS9BT0MT3TK4-MwsIl8lDAYa-IBHlXZqmLHIEjr0ARskeICJQQuGPOYo-I2-XaePpNIgziB1fXPEVSAMERIl28oy43WLjhEWIvBw26HsN7R_wvUuZxId6Y949RVOxry82z-SXcADkEdJN2Ml4sczjfYH24onbd5SbwJJ3hFHllSZZV3IY1T6s2l4OkS8uxNiZTzYhyU0Mz_sFybyPDMqbl_cs7UGY-nwYELT3feUHo"/>
+</div>
+<!-- Status indicator -->
+<div class="absolute bottom-xs right-xs w-[18px] h-[18px] bg-primary rounded-full border-2 border-surface-container"></div>
+</div>
+<div class="flex flex-col items-center md:items-start text-center md:text-left">
+<h1 class="font-display-lg text-display-lg text-on-surface mb-xs">Marcus Vance</h1>
+<div class="flex items-center gap-sm mt-xs">
+<span class="font-label-md text-label-md text-primary bg-primary-container/20 border border-primary-container/30 px-sm py-[2px] rounded">Senior Admin</span>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-[4px]">
+<span class="material-symbols-outlined text-[14px]">location_on</span> Sector 7G
+                    </span>
+</div>
+</div>
+</div>
+<!-- Settings Bento Grid -->
+<div class="p-lg grid grid-cols-1 sm:grid-cols-2 gap-md bg-surface-container">
+<!-- Account Settings -->
+<button class="flex items-start gap-md p-md bg-surface-container-high border border-outline-variant/50 rounded-lg hover:bg-surface-container-highest hover:border-primary-container/50 transition-all text-left group">
+<div class="w-[36px] h-[36px] flex items-center justify-center rounded bg-surface-variant text-on-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+</div>
+<div class="flex-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-[2px]">Account Details</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Credentials &amp; identifiers</p>
+</div>
+</button>
+<!-- Security & Access -->
+<button class="flex items-start gap-md p-md bg-surface-container-high border border-outline-variant/50 rounded-lg hover:bg-surface-container-highest hover:border-primary-container/50 transition-all text-left group">
+<div class="w-[36px] h-[36px] flex items-center justify-center rounded bg-surface-variant text-on-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">shield_person</span>
+</div>
+<div class="flex-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-[2px]">Security Config</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">2FA &amp; access logs</p>
+</div>
+</button>
+<!-- Notification Preferences -->
+<button class="flex items-start gap-md p-md bg-surface-container-high border border-outline-variant/50 rounded-lg hover:bg-surface-container-highest hover:border-primary-container/50 transition-all text-left group">
+<div class="w-[36px] h-[36px] flex items-center justify-center rounded bg-surface-variant text-on-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</div>
+<div class="flex-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-[2px]">Alert Protocols</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Dispatch routing rules</p>
+</div>
+</button>
+<!-- System Preferences -->
+<button class="flex items-start gap-md p-md bg-surface-container-high border border-outline-variant/50 rounded-lg hover:bg-surface-container-highest hover:border-primary-container/50 transition-all text-left group">
+<div class="w-[36px] h-[36px] flex items-center justify-center rounded bg-surface-variant text-on-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</div>
+<div class="flex-1">
+<h3 class="font-body-md text-body-md font-semibold text-on-surface mb-[2px]">Interface Logic</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Theme &amp; localization</p>
+</div>
+</button>
+</div>
+<!-- Footer Actions -->
+<div class="p-lg bg-surface-container-low border-t border-outline-variant">
+<button class="w-full flex items-center justify-center gap-sm py-sm rounded border border-error-container bg-surface-container-high text-error hover:bg-error-container hover:text-on-error-container transition-colors font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">logout</span>
+                Terminate Session
+            </button>
+</div>
+</div>
+</body></html>
