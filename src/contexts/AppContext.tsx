@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'react';
-import type { AppState, AppActions } from '../hooks/useAppState';
+import type { AppState } from '../types/domain';
+import type { AppActions } from '../hooks/useAppState';
 
 export interface AppContextValue {
   state: AppState;
