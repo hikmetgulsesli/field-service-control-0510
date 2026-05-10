@@ -4,6 +4,10 @@ import {
   type PersistedData,
   type StorageError,
   type StorageStatus,
+  type ServiceRecord,
+  type Technician,
+  type UserProfileData,
+  type AppSettings,
   DEFAULT_SETTINGS,
   DEFAULT_PROFILE,
   DEMO_RECORDS,
@@ -51,15 +55,16 @@ export function loadFromStorage(): LoadResult {
       };
     }
 
-    if (!isValidPersistedData(parsed)) {
-      return {
-        data: buildDefaultData(),
-        status: 'corrupt',
-        error: createError('ERR_STORAGE_SCHEMA', 'Stored data schema is invalid or version mismatch.'),
-      };
+    const migrated = migrateData(parsed);
+    if (migrated) {
+      return { data: migrated, status: 'ok', error: null };
     }
 
-    return { data: parsed, status: 'ok', error: null };
+    return {
+      data: buildDefaultData(),
+      status: 'corrupt',
+      error: createError('ERR_STORAGE_SCHEMA', 'Stored data schema is invalid or version mismatch.'),
+    };
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Unknown storage access error';
     return {
@@ -95,13 +100,39 @@ export function retryLoadStorage(): LoadResult {
   return loadFromStorage();
 }
 
-function isValidPersistedData(value: unknown): value is PersistedData {
-  if (typeof value !== 'object' || value === null) return false;
+function migrateData(value: unknown): PersistedData | null {
+  if (typeof value !== 'object' || value === null) return null;
   const v = value as Record<string, unknown>;
-  if (v.version !== STORAGE_VERSION) return false;
-  if (!Array.isArray(v.records)) return false;
-  if (!Array.isArray(v.technicians)) return false;
-  if (typeof v.profile !== 'object' || v.profile === null) return false;
-  if (typeof v.settings !== 'object' || v.settings === null) return false;
-  return true;
+
+  // Validate core structure regardless of version
+  if (!Array.isArray(v.records)) return null;
+  if (!Array.isArray(v.technicians)) return null;
+  if (typeof v.profile !== 'object' || v.profile === null) return null;
+  if (typeof v.settings !== 'object' || v.settings === null) return null;
+
+  const version = typeof v.version === 'number' ? v.version : 0;
+
+  // Future version: we can't safely migrate down, but we can try to read known fields
+  if (version > STORAGE_VERSION) {
+    // Gracefully read what we understand and save back as current version
+    // This preserves user data rather than wiping it
+    return {
+      version: STORAGE_VERSION,
+      records: v.records as ServiceRecord[],
+      technicians: v.technicians as Technician[],
+      profile: v.profile as UserProfileData,
+      settings: v.settings as AppSettings,
+      selectedRecordId: (v.selectedRecordId as string | null) ?? null,
+    };
+  }
+
+  // Current or older version: upgrade on save
+  return {
+    version: STORAGE_VERSION,
+    records: v.records as ServiceRecord[],
+    technicians: v.technicians as Technician[],
+    profile: v.profile as UserProfileData,
+    settings: v.settings as AppSettings,
+    selectedRecordId: (v.selectedRecordId as string | null) ?? null,
+  };
 }

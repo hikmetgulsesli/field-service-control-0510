@@ -148,7 +148,7 @@ export function useAppState(): UseAppStateResult {
     const now = new Date().toISOString();
     const newRecord: ServiceRecord = {
       ...record,
-      id: `rec-${Date.now()}`,
+      id: crypto.randomUUID(),
       createdAt: now,
       updatedAt: now,
     };

@@ -27,16 +27,18 @@ declare global {
 export default function App() {
   const { state, actions } = useAppState();
 
-  // Expose deterministic state for smoke tests
+  // Expose deterministic state for smoke tests (dev only)
   useEffect(() => {
-    window.app = {
-      state: state as unknown as Record<string, unknown>,
-      screen: state.screen,
-      lastError: state.lastError,
-      storageStatus: state.storageStatus,
-      itemCount: state.records.length,
-      activePanel: state.activePanel,
-    };
+    if ((import.meta as any).env?.DEV) {
+      window.app = {
+        state: state as unknown as Record<string, unknown>,
+        screen: state.screen,
+        lastError: state.lastError,
+        storageStatus: state.storageStatus,
+        itemCount: state.records.length,
+        activePanel: state.activePanel,
+      };
+    }
   }, [state]);
 
   const screenComponent = useMemo(() => {

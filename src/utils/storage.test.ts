@@ -54,6 +54,40 @@ describe('storage', () => {
     expect(result.error?.code).toBe('ERR_STORAGE_SCHEMA');
   });
 
+  it('migrates older version data gracefully', () => {
+    const oldData = {
+      version: 0,
+      records: DEMO_RECORDS,
+      technicians: DEMO_TECHNICIANS,
+      profile: DEFAULT_PROFILE,
+      settings: DEFAULT_SETTINGS,
+      selectedRecordId: 'rec-1',
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(oldData));
+    const result = loadFromStorage();
+    expect(result.status).toBe('ok');
+    expect(result.data.version).toBe(1);
+    expect(result.data.selectedRecordId).toBe('rec-1');
+  });
+
+  it('gracefully loads future version data preserving known fields', () => {
+    const futureData = {
+      version: 99,
+      records: DEMO_RECORDS,
+      technicians: DEMO_TECHNICIANS,
+      profile: DEFAULT_PROFILE,
+      settings: DEFAULT_SETTINGS,
+      selectedRecordId: 'rec-2',
+      unknownFutureField: 'should be ignored',
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(futureData));
+    const result = loadFromStorage();
+    expect(result.status).toBe('ok');
+    expect(result.data.version).toBe(1);
+    expect(result.data.selectedRecordId).toBe('rec-2');
+    expect((result.data as any).unknownFutureField).toBeUndefined();
+  });
+
   it('clears storage and resets', () => {
     saveToStorage({
       version: 1,
