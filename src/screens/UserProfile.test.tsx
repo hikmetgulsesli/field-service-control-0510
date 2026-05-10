@@ -188,4 +188,18 @@ describe("UserProfile", () => {
     expect(screen.getByText("Technician")).toBeInTheDocument();
     expect(screen.getByText(/Sector 2/)).toBeInTheDocument();
   });
+
+  it("renders fallback initials avatar when avatarUrl is missing", () => {
+    renderWithContext(<UserProfile />, {
+      profile: {
+        name: "A. Chen",
+        role: "Technician",
+        sector: "Sector 2",
+        email: "a.chen@fieldcontrol.ops",
+        phone: "+1 (555) 019-2848",
+        status: "online",
+      },
+    });
+    expect(screen.getByText("AC")).toBeInTheDocument();
+  });
 });

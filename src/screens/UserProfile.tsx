@@ -50,11 +50,17 @@ export function UserProfile(props: UserProfileProps) {
         <div className="flex flex-col md:flex-row items-center p-xl border-b border-outline-variant/30 gap-lg bg-gradient-to-b from-surface-container-low to-surface-container">
           <div className="relative">
             <div className="w-[100px] h-[100px] rounded-full border-2 border-primary-container p-[2px] bg-surface">
-              <img
-                className="w-full h-full object-cover rounded-full"
-                alt={profile.name}
-                src={profile.avatarUrl || ""}
-              />
+              {profile.avatarUrl ? (
+                <img
+                  className="w-full h-full object-cover rounded-full"
+                  alt={profile.name}
+                  src={profile.avatarUrl}
+                />
+              ) : (
+                <div className="w-full h-full rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-2xl font-semibold">
+                  {profile.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                </div>
+              )}
             </div>
             {/* Status indicator */}
             <div className="absolute bottom-xs right-xs w-[18px] h-[18px] bg-primary rounded-full border-2 border-surface-container"></div>

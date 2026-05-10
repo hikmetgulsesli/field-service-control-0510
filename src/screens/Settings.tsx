@@ -150,7 +150,13 @@ export function Settings(props: SettingsProps) {
               className="ml-xs hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors p-[2px] rounded-full cursor-pointer active:opacity-80 border border-outline-variant"
               aria-label="Open profile"
             >
-              <img alt="User profile avatar" className="w-8 h-8 rounded-full object-cover" src={profile.avatarUrl || ""} />
+              {profile.avatarUrl ? (
+                <img alt="User profile avatar" className="w-8 h-8 rounded-full object-cover" src={profile.avatarUrl} />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-sm font-semibold">
+                  {profile.name.split(" ").map(n => n[0]).join("").slice(0, 2)}
+                </div>
+              )}
             </button>
           </div>
         </header>
@@ -245,8 +251,8 @@ export function Settings(props: SettingsProps) {
                   </div>
                   <div className="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
                     <div>
-                      <div className="font-label-md text-label-md text-on-surface">Routine Service Updates</div>
-                      <div className="font-body-md text-body-md text-on-surface-variant mt-unit">Standard job completion and sync notifications.</div>
+                      <div className="font-label-md text-label-md text-on-surface">Background Data Sync</div>
+                      <div className="font-body-md text-body-md text-on-surface-variant mt-unit">Automatically refresh service records at the configured interval.</div>
                     </div>
                     <button
                       onClick={() => handleToggle("autoRefresh")}
@@ -261,28 +267,6 @@ export function Settings(props: SettingsProps) {
                         aria-hidden={true}
                         className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow ring-0 transition duration-200 ease-in-out ${
                           settings.autoRefresh ? "translate-x-5 bg-on-primary-container" : "translate-x-0 bg-outline"
-                        }`}
-                      ></span>
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between p-sm rounded-lg hover:bg-surface-container-low transition-colors">
-                    <div>
-                      <div className="font-label-md text-label-md text-on-surface">Audible Pings</div>
-                      <div className="font-body-md text-body-md text-on-surface-variant mt-unit">Play sounds for incoming priority tasks.</div>
-                    </div>
-                    <button
-                      onClick={() => actions.updateSettings({ notificationsEnabled: !settings.notificationsEnabled })}
-                      aria-checked={settings.notificationsEnabled}
-                      className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-container focus:ring-offset-2 focus:ring-offset-background ${
-                        settings.notificationsEnabled ? "bg-primary-container" : "bg-surface-container-highest"
-                      }`}
-                      role="switch"
-                      type="button"
-                    >
-                      <span
-                        aria-hidden={true}
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full shadow ring-0 transition duration-200 ease-in-out ${
-                          settings.notificationsEnabled ? "translate-x-5 bg-on-primary-container" : "translate-x-0 bg-outline"
                         }`}
                       ></span>
                     </button>
