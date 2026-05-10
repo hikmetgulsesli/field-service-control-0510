@@ -1,10 +1,11 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { AppContext, useAppContext } from './AppContext';
 import { useAppState } from '../hooks/useAppState';
 
 describe('AppContext', () => {
   it('throws when useAppContext is used outside provider', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     function BadConsumer() {
       useAppContext();
       return null;
@@ -12,6 +13,7 @@ describe('AppContext', () => {
     expect(() => render(<BadConsumer />)).toThrow(
       'useAppContext must be used within an AppProvider'
     );
+    consoleSpy.mockRestore();
   });
 
   it('provides state and actions to children', () => {
