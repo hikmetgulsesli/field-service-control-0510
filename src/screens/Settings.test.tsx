@@ -138,10 +138,10 @@ describe("Settings", () => {
     expect(mockUpdateSettings).toHaveBeenCalledWith({ notificationsEnabled: false });
   });
 
-  it("toggles autoRefresh when Routine Service Updates switch is clicked", () => {
+  it("toggles autoRefresh when Background Data Sync switch is clicked", () => {
     renderWithContext(<Settings />);
     const switches = screen.getAllByRole("switch");
-    // Second switch is Routine Service Updates
+    // Second switch is Background Data Sync
     fireEvent.click(switches[1]);
     expect(mockUpdateSettings).toHaveBeenCalledWith({ autoRefresh: false });
   });
@@ -188,11 +188,11 @@ describe("Settings", () => {
     expect(mockUpdateSettings).toHaveBeenCalledWith({ autoRefresh: false, refreshIntervalSeconds: 0 });
   });
 
-  it("renders search input controlled", () => {
+  it("updates global search query when search input changes", () => {
     renderWithContext(<Settings />);
     const searchInput = screen.getByPlaceholderText(/Search settings/i);
     fireEvent.change(searchInput, { target: { value: "notifications" } });
-    expect(searchInput).toHaveValue("notifications");
+    expect(mockActions.setSearchQuery).toHaveBeenCalledWith("notifications");
   });
 
   it("navigates to profile from avatar button", () => {

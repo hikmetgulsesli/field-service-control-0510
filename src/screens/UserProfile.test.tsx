@@ -202,4 +202,9 @@ describe("UserProfile", () => {
     });
     expect(screen.getByText("AC")).toBeInTheDocument();
   });
+
+  it("renders online status indicator with aria-label", () => {
+    renderWithContext(<UserProfile />);
+    expect(screen.getByLabelText("Online status")).toBeInTheDocument();
+  });
 });

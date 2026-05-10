@@ -63,7 +63,7 @@ export function UserProfile(props: UserProfileProps) {
               )}
             </div>
             {/* Status indicator */}
-            <div className="absolute bottom-xs right-xs w-[18px] h-[18px] bg-primary rounded-full border-2 border-surface-container"></div>
+            <div className="absolute bottom-xs right-xs w-[18px] h-[18px] bg-primary rounded-full border-2 border-surface-container" aria-label="Online status"></div>
           </div>
           <div className="flex flex-col items-center md:items-start text-center md:text-left">
             <h1 className="font-display-lg text-display-lg text-on-surface mb-xs">{profile.name}</h1>

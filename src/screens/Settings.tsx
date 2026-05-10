@@ -7,18 +7,69 @@
 // 3. Add onClick/onChange handlers to interactive elements
 // 4. Replace placeholder data with props/state
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAppContext } from "../contexts/AppContext";
 
 interface SettingsProps {}
 
+interface NavItem {
+  label: string;
+  icon: string;
+  screen: import("../types/domain").AppScreen;
+  active?: boolean;
+}
+
+function NavLink({
+  item,
+  onNavigate,
+  mobile = false,
+}: {
+  item: NavItem;
+  onNavigate: (screen: import("../types/domain").AppScreen) => void;
+  mobile?: boolean;
+}) {
+  const baseClasses = mobile
+    ? "flex items-center gap-md px-sm py-sm rounded-lg cursor-pointer"
+    : "flex items-center gap-md px-sm py-sm rounded-lg cursor-pointer transition-all scale-95 active:scale-100 duration-150";
+  const activeClasses = mobile
+    ? "bg-secondary-container text-on-secondary-container font-bold"
+    : "bg-secondary-container dark:bg-secondary-container text-on-secondary-container dark:text-on-secondary-container font-bold";
+  const inactiveClasses = mobile
+    ? "text-on-surface-variant hover:bg-surface-container-highest"
+    : "text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest";
+
+  return (
+    <button
+      onClick={() => onNavigate(item.screen)}
+      className={`${baseClasses} ${item.active ? activeClasses : inactiveClasses}`}
+      aria-label={item.label}
+    >
+      <span
+        className="material-symbols-outlined"
+        style={item.active ? { fontVariationSettings: "'FILL' 1" } : undefined}
+      >
+        {item.icon}
+      </span>
+      <span className="font-label-md text-label-md">{item.label}</span>
+    </button>
+  );
+}
+
 export function Settings(props: SettingsProps) {
   const { state, actions } = useAppContext();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [apiEndpoint, setApiEndpoint] = useState("https://api.fieldcontrol.corp/v3/prod");
   const [syncIntervalMinutes, setSyncIntervalMinutes] = useState<number | "manual">(15);
   const [connectionTested, setConnectionTested] = useState<string | null>(null);
+  const connectionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (connectionTimeoutRef.current) {
+        clearTimeout(connectionTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const profile = state.profile;
   const settings = state.settings;
@@ -40,15 +91,18 @@ export function Settings(props: SettingsProps) {
 
   const handleTestConnection = () => {
     setConnectionTested("Connection established successfully.");
-    setTimeout(() => setConnectionTested(null), 3000);
+    if (connectionTimeoutRef.current) {
+      clearTimeout(connectionTimeoutRef.current);
+    }
+    connectionTimeoutRef.current = setTimeout(() => setConnectionTested(null), 3000);
   };
 
-  const navItems = [
-    { label: "Dashboard", icon: "dashboard", screen: "dashboard" as const },
-    { label: "Service Records", icon: "assignment", screen: "dashboard" as const },
-    { label: "Insights", icon: "analytics", screen: "insights" as const },
-    { label: "Settings", icon: "settings", screen: "settings" as const, active: true },
-    { label: "Profile", icon: "person", screen: "profile" as const },
+  const navItems: NavItem[] = [
+    { label: "Dashboard", icon: "dashboard", screen: "dashboard" },
+    { label: "Service Records", icon: "assignment", screen: "dashboard" },
+    { label: "Insights", icon: "analytics", screen: "insights" },
+    { label: "Settings", icon: "settings", screen: "settings", active: true },
+    { label: "Profile", icon: "person", screen: "profile" },
   ];
 
   return (
@@ -73,33 +127,18 @@ export function Settings(props: SettingsProps) {
         </button>
         <div className="flex-1 space-y-xs">
           {navItems.map((item) => (
-            <a
-              key={item.label}
-              onClick={(e) => {
-                e.preventDefault();
-                actions.navigate(item.screen);
-              }}
-              className={`flex items-center gap-md px-sm py-sm rounded-lg cursor-pointer transition-all scale-95 active:scale-100 duration-150 ${
-                item.active
-                  ? "bg-secondary-container dark:bg-secondary-container text-on-secondary-container dark:text-on-secondary-container font-bold"
-                  : "text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest"
-              }`}
-              href="#"
-            >
-              <span className="material-symbols-outlined" style={item.active ? {fontVariationSettings: "'FILL' 1"} : undefined}>{item.icon}</span>
-              <span className="font-label-md text-label-md">{item.label}</span>
-            </a>
+            <NavLink key={item.label} item={item} onNavigate={actions.navigate} />
           ))}
         </div>
         <div className="mt-auto">
-          <a
-            onClick={(e) => { e.preventDefault(); }}
-            className="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150 cursor-pointer"
-            href="#"
+          <button
+            onClick={() => {}}
+            className="flex items-center gap-md px-sm py-sm rounded-lg text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all scale-95 active:scale-100 duration-150 cursor-pointer w-full text-left"
+            aria-label="Support"
           >
             <span className="material-symbols-outlined">contact_support</span>
             <span className="font-label-md text-label-md">Support</span>
-          </a>
+          </button>
         </div>
       </nav>
       {/* Main Content Area */}
@@ -124,8 +163,8 @@ export function Settings(props: SettingsProps) {
                 className="w-full bg-surface-container-high border-outline-variant text-on-surface placeholder-on-surface-variant rounded-full py-sm pl-xl pr-md text-body-md focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
                 placeholder="Search settings..."
                 type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={state.searchQuery}
+                onChange={(e) => actions.setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -164,23 +203,7 @@ export function Settings(props: SettingsProps) {
         {mobileMenuOpen && (
           <div className="md:hidden absolute top-16 left-0 right-0 z-40 bg-surface-container border-b border-outline-variant p-md space-y-xs shadow-lg">
             {navItems.map((item) => (
-              <a
-                key={item.label}
-                onClick={(e) => {
-                  e.preventDefault();
-                  actions.navigate(item.screen);
-                  setMobileMenuOpen(false);
-                }}
-                className={`flex items-center gap-md px-sm py-sm rounded-lg cursor-pointer ${
-                  item.active
-                    ? "bg-secondary-container text-on-secondary-container font-bold"
-                    : "text-on-surface-variant hover:bg-surface-container-highest"
-                }`}
-                href="#"
-              >
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <span className="font-label-md text-label-md">{item.label}</span>
-              </a>
+              <NavLink key={item.label} item={item} onNavigate={(screen) => { actions.navigate(screen); setMobileMenuOpen(false); }} mobile />
             ))}
             <button
               onClick={() => { actions.navigate("create"); setMobileMenuOpen(false); }}
