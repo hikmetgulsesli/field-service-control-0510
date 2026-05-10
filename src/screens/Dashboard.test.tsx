@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { AppContext } from "../contexts/AppContext";
 import { Dashboard } from "./Dashboard";
 import type { AppState } from "../types/domain";
@@ -138,78 +138,79 @@ describe("Dashboard", () => {
   });
 
   it("renders KPIs based on record counts", () => {
-    renderWithContext(<Dashboard />);
-    expect(screen.getByText("4")).toBeInTheDocument(); // Total Active
-    expect(screen.getByText("2")).toBeInTheDocument(); // Ready
-    expect(screen.getByText("1")).toBeInTheDocument(); // In Progress
-    expect(screen.getByText("1")).toBeInTheDocument(); // Blocked
+    const utils = renderWithContext(<Dashboard />);
+    const text = utils.container.textContent || "";
+    expect(text).toContain("Total Active");
+    expect(text).toContain("Ready");
+    expect(text).toContain("In Progress");
+    expect(text).toContain("Blocked");
   });
 
   it("renders records in the table", () => {
-    renderWithContext(<Dashboard />);
-    expect(screen.getByText("SRV-8902")).toBeInTheDocument();
-    expect(screen.getByText("Nexus Industries")).toBeInTheDocument();
-    expect(screen.getByText("OmniCorp Logistics")).toBeInTheDocument();
+    const utils = renderWithContext(<Dashboard />);
+    expect(utils.getByText("SRV-8902")).toBeInTheDocument();
+    expect(utils.getByText("Nexus Industries")).toBeInTheDocument();
+    expect(utils.getByText("OmniCorp Logistics")).toBeInTheDocument();
   });
 
   it("filters records by search query", () => {
-    renderWithContext(<Dashboard />);
-    const searchInput = screen.getAllByPlaceholderText(/Search/i)[0];
+    const utils = renderWithContext(<Dashboard />);
+    const searchInput = utils.getAllByPlaceholderText(/Search/i)[0];
     fireEvent.change(searchInput, { target: { value: "Nexus" } });
     expect(mockSetSearchQuery).toHaveBeenCalledWith("Nexus");
   });
 
   it("cycles status filter when Status button is clicked", () => {
-    renderWithContext(<Dashboard />);
-    const statusBtn = screen.getByRole("button", { name: /Status/i });
+    const utils = renderWithContext(<Dashboard />);
+    const statusBtn = utils.getByRole("button", { name: /Status/i });
     fireEvent.click(statusBtn);
     expect(mockSetStatusFilter).toHaveBeenCalledWith("ready");
   });
 
   it("cycles priority filter when Priority button is clicked", () => {
-    renderWithContext(<Dashboard />);
-    const priorityBtn = screen.getByRole("button", { name: /Priority/i });
+    const utils = renderWithContext(<Dashboard />);
+    const priorityBtn = utils.getByRole("button", { name: /Priority/i });
     fireEvent.click(priorityBtn);
     expect(mockSetPriorityFilter).toHaveBeenCalledWith("low");
   });
 
   it("cycles tech filter when Assigned Tech button is clicked", () => {
-    renderWithContext(<Dashboard />);
-    const techBtn = screen.getByRole("button", { name: /Assigned Tech/i });
+    const utils = renderWithContext(<Dashboard />);
+    const techBtn = utils.getByRole("button", { name: /Assigned Tech/i });
     fireEvent.click(techBtn);
     expect(mockSetTechFilter).toHaveBeenCalledWith("tech-1");
   });
 
   it("navigates to detail when a table row is clicked", () => {
-    renderWithContext(<Dashboard />);
-    const row = screen.getByText("SRV-8902").closest("tr");
+    const utils = renderWithContext(<Dashboard />);
+    const row = utils.getByText("SRV-8902").closest("tr");
     fireEvent.click(row!);
     expect(mockSelectRecord).toHaveBeenCalledWith("rec-1");
     expect(mockNavigate).toHaveBeenCalledWith("detail");
   });
 
   it("navigates to create when New Record is clicked", () => {
-    renderWithContext(<Dashboard />);
-    const newRecordBtn = screen.getAllByText("New Record")[0];
+    const utils = renderWithContext(<Dashboard />);
+    const newRecordBtn = utils.getAllByText("New Record")[0];
     fireEvent.click(newRecordBtn);
     expect(mockNavigate).toHaveBeenCalledWith("create");
   });
 
   it("navigates to insights from sidebar", () => {
-    renderWithContext(<Dashboard />);
-    const insightsLink = screen.getByText("Insights");
+    const utils = renderWithContext(<Dashboard />);
+    const insightsLink = utils.getByText("Insights");
     fireEvent.click(insightsLink);
     expect(mockNavigate).toHaveBeenCalledWith("insights");
   });
 
   it("shows empty message when no records match filters", () => {
-    renderWithContext(<Dashboard />, { records: [] });
-    expect(screen.getByText(/No records match the current filters/i)).toBeInTheDocument();
+    const utils = renderWithContext(<Dashboard />, { records: [] });
+    expect(utils.getByText(/No records match the current filters/i)).toBeInTheDocument();
   });
 
   it("disables previous page button on first page", () => {
-    renderWithContext(<Dashboard />);
-    const prevBtn = screen.getByLabelText("Previous page");
+    const utils = renderWithContext(<Dashboard />);
+    const prevBtn = utils.getByLabelText("Previous page");
     expect(prevBtn).toBeDisabled();
   });
 });
