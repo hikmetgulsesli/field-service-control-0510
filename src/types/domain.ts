@@ -73,6 +73,7 @@ export interface AppState {
   statusFilter: ServiceStatus | 'all';
   priorityFilter: string | 'all';
   techFilter: string | 'all';
+  lastNotice?: string | null;
   lastError: StorageError | null;
   storageStatus: StorageStatus;
 }
@@ -97,6 +98,9 @@ export const DEFAULT_SETTINGS: AppSettings = {
   defaultFilterStatus: 'all',
 };
 
+const avatarSvg = (label: string, bg: string, fg: string) =>
+  `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="32" fill="${bg}"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" fill="${fg}" font-family="Arial,sans-serif" font-size="22" font-weight="700">${label}</text></svg>`;
+
 export const DEFAULT_PROFILE: UserProfileData = {
   name: 'Marcus Vance',
   role: 'Senior Admin',
@@ -104,8 +108,7 @@ export const DEFAULT_PROFILE: UserProfileData = {
   email: 'm.vance@fieldcontrol.ops',
   phone: '+1 (555) 019-2847',
   status: 'online',
-  avatarUrl:
-    'https://lh3.googleusercontent.com/aida-public/AB6AXuDs6uE81zDY65NhdTVBG5E9GIjZToTYLO9bU8rS9BT3MT3TK4-MwsIl8lDAYa-IBHlXZqmLHIEjr0ARskeICJQQuGPOYo-I2-XaePpNIgziB1fXPEVSAMERIl28oy43WLjhEWIvBw26HsN7R_wvUuZxId6Y949RVOxry82z-SXcADkEdJN2Ml4sczjfYH24onbd5SbwJJ3hFHllSZZV3IY1T6s2l4OkS8uxNiZTzYhyU0Mz_sFybyPDMqbl_cs7UGY-nwYELT3feUHo',
+  avatarUrl: avatarSvg('MV', '%23344054', '%23e0e7ff'),
 };
 
 export const DEMO_TECHNICIANS: Technician[] = [
@@ -115,8 +118,7 @@ export const DEMO_TECHNICIANS: Technician[] = [
     initials: 'JM',
     sector: 'Sector 4',
     isAvailable: true,
-    avatarUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBGOI3yneUZ-jy9WCgxIaXu_ycgWqekFiBOY75LgCLgqtzEbcXdqGzi0VtixyNjP6eN2nQU7AQAnMuecIC0sdlih1YFgJfLGAZ-SuQ8H-_Ey5yRxn24uzf_F4HGPd7ybDHxODirENvfcJJsULy6GXnjFgouwXWfKO2mlURm4pvAtGn_qY4rorjyFcmOZBXceI6QmG7PiCHhCNcqCCUwkslTIUEAexvyztSD3Ip7g2pCfcTHYOA-X7YQ-Nxs2kpdBkwGcPhJMfKkUkYT',
+    avatarUrl: avatarSvg('JM', '%232d4a3e', '%23e7fff2'),
   },
   {
     id: 'tech-2',
@@ -124,8 +126,7 @@ export const DEMO_TECHNICIANS: Technician[] = [
     initials: 'AC',
     sector: 'Sector 2',
     isAvailable: true,
-    avatarUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAkShUieNFbdxh4CUmon1FoBzLzXYmlFiPXa6PyQmL7dMMA3ZCbLbwUG47AHP96NCvx1wIEF2ETKkEmTKYrWz896heEvEKAz2Tju17gmm-OEPI11bySm2Ts22_gjSCUlNJ7QH2u1IHDjOZReLAmbuVMqtoJDjCmpbuchchCAvva3_L0yuTV2GT3WfDQaa3CmCMUWRKMLGE-N0d8lkNUn8Z__VL_cs6RHucCCL5imfUQkv6hjfsgbd6t5Wh5tTfdwYs6AhK2RPPm17MY',
+    avatarUrl: avatarSvg('AC', '%2337486b', '%23dbeafe'),
   },
   {
     id: 'tech-3',

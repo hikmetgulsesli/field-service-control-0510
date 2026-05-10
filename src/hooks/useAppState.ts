@@ -51,9 +51,50 @@ const INITIAL_STATE: AppState = {
   statusFilter: 'all',
   priorityFilter: 'all',
   techFilter: 'all',
+  lastNotice: null,
   lastError: null,
   storageStatus: 'loading',
 };
+
+const SCREEN_HASHES: Record<AppScreen, string> = {
+  dashboard: '#dashboard',
+  create: '#create',
+  detail: '#detail',
+  insights: '#insights',
+  settings: '#settings',
+  profile: '#profile',
+  error: '#error',
+  empty: '#empty',
+};
+
+function normalizeHash(hash: string) {
+  return hash.replace(/^#\/?/, '').trim().toLowerCase();
+}
+
+function updateLocationHash(screen: AppScreen) {
+  if (typeof window === 'undefined') return;
+  const hash = SCREEN_HASHES[screen];
+  if (!hash || window.location.hash === hash) return;
+  const current = normalizeHash(window.location.hash);
+  if (screen === 'detail' && current.startsWith('service/')) return;
+  if (current === normalizeHash(hash)) return;
+  window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+}
+
+function titleize(value: string) {
+  return value
+    .replace(/[-_]/g, ' ')
+    .replace(/\b\w/g, char => char.toUpperCase());
+}
+
+function panelNotice(panel: string) {
+  return `${titleize(panel)} panel opened.`;
+}
+
+function filterNotice(label: string, value: string) {
+  const formatted = value === 'all' ? 'All' : titleize(value);
+  return `Filter updated: ${label} ${formatted}.`;
+}
 
 function buildPersistedData(state: AppState): PersistedData {
   return {
@@ -96,6 +137,7 @@ export function useAppState(): UseAppStateResult {
   }, [state.records, state.technicians, state.profile, state.settings, state.selectedRecordId]);
 
   const navigate = useCallback((screen: AppScreen) => {
+    updateLocationHash(screen);
     setState(prev => ({
       ...prev,
       previousScreen: prev.screen,
@@ -107,6 +149,7 @@ export function useAppState(): UseAppStateResult {
   const goBack = useCallback(() => {
     setState(prev => {
       const target = prev.previousScreen ?? 'dashboard';
+      updateLocationHash(target);
       return {
         ...prev,
         screen: target,
@@ -117,7 +160,7 @@ export function useAppState(): UseAppStateResult {
   }, []);
 
   const openPanel = useCallback((panel: string) => {
-    setState(prev => ({ ...prev, activePanel: panel }));
+    setState(prev => ({ ...prev, activePanel: panel, lastNotice: panelNotice(panel) }));
   }, []);
 
   const closePanel = useCallback(() => {
@@ -129,15 +172,30 @@ export function useAppState(): UseAppStateResult {
   }, []);
 
   const setStatusFilter = useCallback((status: AppState['statusFilter']) => {
-    setState(prev => ({ ...prev, statusFilter: status }));
+    setState(prev => ({
+      ...prev,
+      statusFilter: status,
+      activePanel: 'filters',
+      lastNotice: filterNotice('Status', status),
+    }));
   }, []);
 
   const setPriorityFilter = useCallback((priority: string) => {
-    setState(prev => ({ ...prev, priorityFilter: priority }));
+    setState(prev => ({
+      ...prev,
+      priorityFilter: priority,
+      activePanel: 'filters',
+      lastNotice: filterNotice('Priority', priority),
+    }));
   }, []);
 
   const setTechFilter = useCallback((tech: string) => {
-    setState(prev => ({ ...prev, techFilter: tech }));
+    setState(prev => ({
+      ...prev,
+      techFilter: tech,
+      activePanel: 'filters',
+      lastNotice: filterNotice('Assigned Tech', tech),
+    }));
   }, []);
 
   const selectRecord = useCallback((id: string | null) => {
@@ -153,7 +211,12 @@ export function useAppState(): UseAppStateResult {
       updatedAt: now,
     };
     setState(prev => {
-      const next = { ...prev, records: [newRecord, ...prev.records] };
+      const next = {
+        ...prev,
+        records: [newRecord, ...prev.records],
+        activePanel: null,
+        lastNotice: `Record saved: ${newRecord.serviceId}.`,
+      };
       return next;
     });
   }, []);
@@ -163,14 +226,20 @@ export function useAppState(): UseAppStateResult {
       const records = prev.records.map(r =>
         r.id === id ? { ...r, ...patch, updatedAt: new Date().toISOString() } : r
       );
-      return { ...prev, records };
+      return { ...prev, records, lastNotice: 'Record updated.' };
     });
   }, []);
 
   const deleteRecord = useCallback((id: string) => {
     setState(prev => {
       const records = prev.records.filter(r => r.id !== id);
-      return { ...prev, records, selectedRecordId: prev.selectedRecordId === id ? null : prev.selectedRecordId };
+      return {
+        ...prev,
+        records,
+        selectedRecordId: prev.selectedRecordId === id ? null : prev.selectedRecordId,
+        activePanel: null,
+        lastNotice: 'Record deleted.',
+      };
     });
   }, []);
 

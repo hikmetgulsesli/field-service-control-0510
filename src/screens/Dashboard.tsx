@@ -182,7 +182,7 @@ export function Dashboard(props: DashboardProps) {
               Dashboard
             </a>
             <a
-              onClick={(e) => { e.preventDefault(); actions.navigate("dashboard"); }}
+              onClick={(e) => { e.preventDefault(); actions.openPanel("support"); }}
               className="text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-all rounded-lg flex items-center gap-md px-md py-sm scale-95 active:scale-100 duration-150 group cursor-pointer"
               href="#"
             >
@@ -281,7 +281,7 @@ export function Dashboard(props: DashboardProps) {
               <button onClick={() => actions.openPanel("notifications")} className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 transition-opacity" aria-label="Notifications">
                 <span className="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
               </button>
-              <button onClick={() => actions.navigate("settings")} className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 transition-opacity" aria-label="Help">
+              <button onClick={() => actions.openPanel("help")} className="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant dark:text-on-surface-variant hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors cursor-pointer active:opacity-80 transition-opacity" aria-label="Help">
                 <span className="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
               </button>
               <div onClick={() => actions.navigate("profile")} className="ml-sm w-8 h-8 rounded-full bg-secondary-container border border-outline-variant overflow-hidden cursor-pointer">
